@@ -50,6 +50,11 @@ Image make_one( Image* pic1, Image* pic2, int x, int y ) {
 		}
 	}
 
+	if( x < 0 || y < 0 ) {
+		return temp;
+	}
+
+
 	for( j = y; (j - y) < pic2->height && j < pic1->height; j++ ) {
 		for( i = x; (i - x) < pic2->width && i < pic1->width; i++ ) {
 			temp.pixels[i][j] = overlay( &pic1->pixels[i][j], &pic2->pixels[i - x][j - y]);
