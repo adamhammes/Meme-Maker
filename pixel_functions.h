@@ -1,3 +1,6 @@
+#ifndef _PIXEL_FUNCTIONS_H_
+#define _PIXEL_FUNCTIONS_H_
+
 #include "pixel.h"
 #include <string.h>
 
@@ -8,3 +11,5 @@ void color_shift(Pixel *p, char* pattern);
 Pixel overlay(Pixel *a, Pixel *b);
 void swap_colors(unsigned char *a, unsigned char *b);
 void triple_swap( unsigned char *a, unsigned char *b, unsigned char *c);
+
+#endif
