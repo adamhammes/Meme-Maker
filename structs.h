@@ -6,9 +6,8 @@
 typedef struct font_s {
 	Image* base_image;
 	int coords[256][4];
-	Image letters[256];
+	Image* letters;
 	char* name;
-	char* file_name;
 } Font;
 
 typedef struct meme_s {
