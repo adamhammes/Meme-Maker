@@ -1,9 +1,14 @@
+#ifndef _STRUCTS_H_
+#define _STRUCTS_H_
+
 #include "image.h"
 
 typedef struct font_s {
 	Image base_image;
+	int coords[256][4];
 	Image letters[256];
 	char* name;
+	char* file_name;
 } Font;
 
 typedef struct meme_s {
@@ -30,3 +35,5 @@ typedef struct database_s {
 	Meme* memes;
 	int num_memes;
 } Database;
+
+#endif
