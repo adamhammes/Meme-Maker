@@ -1,8 +1,8 @@
-test: test.o font_functions.o
-	gcc -g -o test test.o image_functions.o pixel_functions.o font_functions.o -lm
+test: testing.o font_functions.o
+	gcc -o testing testing.o image_functions.o pixel_functions.o font_functions.o -lm
 
-test.o : test.c font_functions.o
-	gcc -ansi -pedantic -c test.c
+testing.o : testing.c font_functions.o
+	gcc -ansi -pedantic -c testing.c
 
 structs : structs.h
 	gcc -ansi -pedantic structs.h
