@@ -1,7 +1,7 @@
 #include "font_functions.h"
 
-
 #define MAX_LENGTH 256
+
 void no_whitespace( char* str ) {
 	int begin;
 	int end;
@@ -26,52 +26,57 @@ void no_whitespace( char* str ) {
 }
 
 Font* read_font_file( char* name ) {
-	char* line;
+	char* line = NULL;
 	Image temp;
 	Font* f = malloc( sizeof( Font ) );
 	int length;
 	int nums[4];
 	char c;
 	int i, j;
+	size_t buffer_size;
 	FILE* file = fopen( name, "r" );
 	
 	if( file == 0 ) { /* if we don't find the file */
 		return 0;
 	}
-	
+
+	f->letters = (Image*) malloc( sizeof( Image ) * 256 );	
 	f->base_image = (Image*) malloc( sizeof( Image ) );
 	/* set all coords to zero so we know later which ones are initialized */
+
+	for( i = 0; i < 256; i++ ) {
+		for( j = 0; j < 4; j++ ) { 
+			f->coords[i][j] = 0;
+		}
+	}
 	
-	line = malloc( MAX_LENGTH );
-	while( fgets( line, 100, file ) ) { /* while we have not reached end of file */
+	while( getline( &line, &buffer_size, file ) != -1 ) { /* while we have not reached end of file */
 		if( line[0] == 'N' ) { /* if we are reading the name line */
 			no_whitespace( line );
 			length = strlen( line ) - 5 + 1; /* plus 1 to account for null 0 */
 			f->name = (char*) malloc( length );
 			strcpy( f->name, &line[5] );
+			f->name[length - 1] = 0;
 		} else if( line[0] == 'I' ) { /* if we are reading file name line */
 			no_whitespace( line );
-			length = strlen( line ) - 6 + 1;
-			f->file_name = (char*) malloc( length );
-			strcpy( f->file_name, &line[6] );
-			temp = read_in( f->file_name );
-			f->base_image = & temp;
+			temp = read_in( &line[6] );
+			f->base_image = &temp;
 		} else if( line[0] == 'C' ) { /* if we are specifying character dimensions */
 			no_whitespace( line );
 			c = line[9];
-			sscanf( line,  "%d %d %d %d", &f->coords[c][0], &f->coords[c][1], &f->coords[c][2], &f->coords[c][3] );
+			sscanf( line,  "CHARACTER%c:%d %d %d %d", &c, &f->coords[c][0], &f->coords[c][1], &f->coords[c][2], &f->coords[c][3] );
 		}
+		free( line );
+		line = NULL;
 	}
 	free( line );
 	fclose( file );
 	
-	/* now set the individual character pictures
 	for( i = 0; i < 256; i++ ) {
-		if( f->coords[i][2] != 0 ) { if the coordinates were listed for this character
+		if( f->coords[i][2] != 0 ) { /* if the coordinates were listed for this character */
 			set_letter( f, (char) i, f->coords[i][0], f->coords[i][1], f->coords[i][2], f->coords[i][3] );
 		}
 	}
-	*/
 	return f;
 }
 
@@ -80,17 +85,14 @@ int set_letter( Font* f, char c, int x, int y, int w, int h ) {
 		x < 0 || y < 0 ) { /* if invalid dimensions given */
 		return 0;
 	}
+
 	f->letters[ (int) c ] = crop( f->base_image, x, y, w, h );
 	return 1;
 }
 
 void free_font( Font* font ) {
 	free( font->base_image );
-	printf("base image \n");
 	free( font->name );
-	printf("name \n");
-	free( font->file_name );
-	printf("file name \n");
 }
 
 int get_width( Font* font, char c ) {
