@@ -4,7 +4,7 @@
 #include "image.h"
 
 typedef struct font_s {
-	Image base_image;
+	Image* base_image;
 	int coords[256][4];
 	Image letters[256];
 	char* name;
