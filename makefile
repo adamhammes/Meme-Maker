@@ -1,5 +1,5 @@
 test: test.o font_functions.o
-	gcc -o test test.o image_functions.o pixel_functions.o font_functions.o -lm
+	gcc -g -o test test.o image_functions.o pixel_functions.o font_functions.o -lm
 
 test.o : test.c font_functions.o
 	gcc -ansi -pedantic -c test.c
@@ -25,5 +25,5 @@ image_functions.o : image_functions.h image_functions.c pixel_functions.o
 pixel_functions.o : pixel_functions.c pixel_functions.c pixel.h
 	gcc -ansi -pedantic -c pixel_functions.c
 
-font_functions.o : font_functions.h font_functions.c image_functions.o
+font_functions.o : font_functions.h font_functions.c image_functions.o structs.h
 	gcc -ansi -pedantic -c font_functions.c
