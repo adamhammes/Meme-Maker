@@ -36,7 +36,7 @@ Image read_in( char* name ) {
 			fread( &image.pixels[i][j].alpha, sizeof(unsigned char), 1, f );
 		}
 	}
-
+	fclose( f );
 	return image;
 }
 
