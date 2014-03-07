@@ -1,3 +1,7 @@
+#ifndef _IMAGE_H_
+#define _IMAGE_H_
+
+
 #include "pixel_functions.h"
 
 /*
@@ -12,3 +16,5 @@ typedef struct image_s {
 	/* will hold the pixels of the image */
 	Pixel** pixels;
 } Image;
+
+#endif
