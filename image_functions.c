@@ -5,7 +5,7 @@ FILE* open_file(char* name) {
 
 	if( file == 0 ) {
 		printf("File not found.\n");
-		exit(1);
+		exit(0);
 	}
 
 	fflush(file);
@@ -14,7 +14,9 @@ FILE* open_file(char* name) {
 }
 
 
-Image read_in(FILE* f) {
+Image read_in( char* name ) {
+	FILE* f = fopen( name, "rb" );
+
 	int i, j;
 	Image image;
 	fread( &(image.width),  sizeof(int), 1, f );
