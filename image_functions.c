@@ -37,6 +37,7 @@ Image read_in( char* name ) {
 		}
 	}
 	fclose( f );
+
 	return image;
 }
 
@@ -59,7 +60,9 @@ Image make_one( Image* pic1, Image* pic2, int x, int y ) {
 
 	for( j = y; (j - y) < pic2->height && j < pic1->height; j++ ) {
 		for( i = x; (i - x) < pic2->width && i < pic1->width; i++ ) {
-			temp.pixels[i][j] = overlay( &pic1->pixels[i][j], &pic2->pixels[i - x][j - y]);
+			if( i - x < pic2->width && j - y < pic2->height ) {
+				temp.pixels[i][j] = overlay( &pic1->pixels[i][j], &pic2->pixels[i - x][j - y]);
+			}
 		}
 	}
 	return temp;
@@ -79,7 +82,9 @@ Image crop(Image* pic, int x_start, int y_start, int x, int y) {
 
 	for( j = y_start; j < (y_start + y) && j < pic->height; j++ ) { 
 		for( i = x_start; i < (x_start + x) && i < pic->width; i++ ) {
-			new.pixels[i - x_start][j - y_start] = pic->pixels[i][j];
+			if( i - x_start < pic->width && j - y_start < pic->height ) {
+				new.pixels[i - x_start][j - y_start] = pic->pixels[i][j];
+			}
 		}
 	}
 
