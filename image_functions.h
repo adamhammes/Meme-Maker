@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 FILE* open_file(char* name);
-Image read_in(FILE* f);
+Image read_in( char* name);
 
 
 Image crop(Image* pic, int x_start, int y_start, int x, int y);
