@@ -49,7 +49,6 @@ Font* read_font_file( char* name ) {
 			f->coords[i][j] = 0;
 		}
 	}
-	
 	while( getline( &line, &buffer_size, file ) != -1 ) { /* while we have not reached end of file */
 		if( line[0] == 'N' ) { /* if we are reading the name line */
 			no_whitespace( line );
