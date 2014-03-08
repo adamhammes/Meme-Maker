@@ -27,3 +27,6 @@ pixel_functions.o : pixel_functions.c pixel_functions.c pixel.h
 
 font_functions.o : font_functions.h font_functions.c image_functions.o structs.h
 	gcc -ansi -pedantic -c font_functions.c
+
+meme_functions.o : meme_functions.h meme_functions.c font_functions.o
+	gcc -ansi -pedantic -c meme_functions.c
