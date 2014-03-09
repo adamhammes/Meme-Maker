@@ -47,7 +47,7 @@ int main( int argc, char** argv ) {
 												crop_position(	macro->font,
 																&macro->meme->pic,
 																place->text,
-																j + 1,
+																j,
 																place->x ),
 												place->y - macro->font->letters[ place->text[j] ].height );
 			}
