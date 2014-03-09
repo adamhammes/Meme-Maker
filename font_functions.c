@@ -1,3 +1,6 @@
+#ifndef _FONT_FUNCTIONS_C_
+#define _FONT_FUNCTIONS_C_
+
 #include "font_functions.h"
 
 #define MAX_LENGTH 256
@@ -25,10 +28,10 @@ void no_whitespace( char* str ) {
 	memmove( str, str + begin, end - begin + 2 ); /* +2 for null terminator */
 }
 
-Font* read_font_file( char* name ) {
+Font read_font_file( char* name ) {
 	char* line = NULL;
 	Image temp;
-	Font* f = malloc( sizeof( Font ) );
+	Font f;
 	int length;
 	int nums[4];
 	char c;
@@ -36,62 +39,61 @@ Font* read_font_file( char* name ) {
 	size_t buffer_size;
 	FILE* file = fopen( name, "r" );
 	
-	if( file == 0 ) { /* if we don't find the file */
-		return 0;
-	}
-
-	f->letters = (Image*) malloc( sizeof( Image ) * 256 );	
-	f->base_image = (Image*) malloc( sizeof( Image ) );
 	/* set all coords to zero so we know later which ones are initialized */
 
 	for( i = 0; i < 256; i++ ) {
 		for( j = 0; j < 4; j++ ) { 
-			f->coords[i][j] = 0;
+			f.coords[i][j] = 0;
 		}
 	}
+
 	while( getline( &line, &buffer_size, file ) != -1 ) { /* while we have not reached end of file */
 		if( line[0] == 'N' ) { /* if we are reading the name line */
 			no_whitespace( line );
 			length = strlen( line ) - 5 + 1; /* plus 1 to account for null 0 */
-			f->name = (char*) malloc( length );
-			strcpy( f->name, &line[5] );
-			f->name[length - 1] = 0;
+			strcpy( f.name, &line[5] );
+			f.name[length - 1] = 0;
 		} else if( line[0] == 'I' ) { /* if we are reading file name line */
 			no_whitespace( line );
-			temp = read_in( &line[6] );
-			f->base_image = &temp;
+			f.base_image = read_in( &line[6] );
 		} else if( line[0] == 'C' ) { /* if we are specifying character dimensions */
 			no_whitespace( line );
 			c = line[9];
-			sscanf( line,  "CHARACTER%c:%d %d %d %d", &c, &f->coords[c][0], &f->coords[c][1], &f->coords[c][2], &f->coords[c][3] );
+			sscanf( line,  "CHARACTER%c:%d %d %d %d", &c, &f.coords[c][0], &f.coords[c][1], &f.coords[c][2], &f.coords[c][3] );
 		}
 		free( line );
 		line = NULL;
 	}
-	free( line );
 	fclose( file );
 	
 	for( i = 0; i < 256; i++ ) {
-		if( f->coords[i][2] != 0 ) { /* if the coordinates were listed for this character */
-			set_letter( f, (char) i, f->coords[i][0], f->coords[i][1], f->coords[i][2], f->coords[i][3] );
+		if( f.coords[i][2] != 0 ) { /* if the coordinates were listed for this character */
+			set_letter( &f, (char) i, f.coords[i][0], f.coords[i][1], f.coords[i][2], f.coords[i][3] );
 		}
 	}
 	return f;
 }
 
 int set_letter( Font* f, char c, int x, int y, int w, int h ) {
-	if( x < 0 || x + w > f->base_image->width || y < 0 || y + h > f->base_image->height ||
+	if( x < 0 || x + w > f->base_image.width || y < 0 || y + h > f->base_image.height ||
 		x < 0 || y < 0 ) { /* if invalid dimensions given */
 		return 0;
 	}
 
-	f->letters[ (int) c ] = crop( f->base_image, x, y, w, h );
+	f->letters[ (int) c ] = crop( &f->base_image, x, y, w, h );
 	return 1;
 }
 
 void free_font( Font* font ) {
-	free( font->base_image );
-	free( font->name );
+	int i;
+
+	close_image( &font->base_image );
+
+	for( i = 0; i < 256; i++ ) {
+		if( font->coords[i][3] != 0 ) {
+			close_image( &font->letters[i] );
+		}
+	}
 }
 
 int get_width( Font* font, char c ) {
@@ -128,3 +130,5 @@ int crop_position( Font* f, Image* pic, char* sequence, int index, int x, int y 
 
 	return cur_width + far_left;
 }
+
+#endif
