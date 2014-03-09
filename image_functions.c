@@ -71,7 +71,6 @@ Image make_one( Image* pic1, Image* pic2, int x, int y ) {
 Image crop(Image* pic, int x_start, int y_start, int x, int y) {
 	Image new;
 	int i, j;
-
 	new.width  = x;
 	new.height = y;
 	new.pixels = (Pixel**) malloc( new.width * sizeof(Pixel*) );
