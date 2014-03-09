@@ -4,20 +4,28 @@
 #include "image.h"
 
 typedef struct font_s {
-	Image* base_image;
+	Image base_image;
 	int coords[256][4];
-	Image* letters;
-	char* name;
+	Image letters[256];
+	char name[100];
 } Font;
 
+
+typedef struct place_s {
+	char name[100];
+
+	int x;
+	int y;
+} Place;
+
+
 typedef struct meme_s {
-	char* name;
-	char* file_name;
+	char name[100];
+	char file_name[100];
+	Image pic;
 	
-	int top_x;
-	int top_y;
-	int bot_x;
-	int bot_y;
+	Place places[100];
+	int num_places;	
 } Meme;
 
 typedef struct macro_s {
