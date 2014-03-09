@@ -3,10 +3,15 @@
 
 #include "font_functions.h"
 
+
+Place* name_place( Meme* meme, char* name );
 Place* get_place( Meme* meme, int index );
 int count_spaces( char* line );
 Meme make_meme( char* name );
+
 Meme* get_meme( Database* data, char* name );
+Font* get_font( Database* data, char* name );
+
 void read_meme_file( Database* data, char* name );
 void free_database( Database* data );
 

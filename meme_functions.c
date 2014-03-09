@@ -3,6 +3,17 @@
 
 #include "meme_functions.h"
 
+Place* name_place( Meme* meme, char* name ) {
+	int i;
+
+	for ( i = 0; i < meme->num_places; i++ ) {
+			if( strcmp( meme->places[i].name, name ) == 0 )	return &meme->places[i] ;
+	}
+
+	return 0;
+}
+
+
 Place* get_place( Meme* meme, int index ) {
 	return &meme->places[index];
 }
@@ -24,6 +35,19 @@ Meme make_meme( char* name ) {
 	m.num_places = 0;
 	return m;
 }
+
+Font* get_font( Database* data, char* name ) {
+	int i;
+
+	for( i = 0; i < data->num_fonts; i++ ) {
+		if( strcmp( data->fonts[i].name, name ) == 0 ) {
+			return &data->fonts[i];
+		}
+	}
+
+	return 0;
+}
+
 
 Meme* get_meme( Database* data, char* name ) {
 	int i;
@@ -117,6 +141,7 @@ void read_meme_file( Database* data, char* name ) {
 			strcpy( place->name, word );
 			place->x = atoi( strtok( NULL, " :" ) );
 			place->y = atoi( strtok( NULL, " :" ) );
+			place->has_text = 0;
 		}
 		free( line );
 		line = NULL;
@@ -127,15 +152,12 @@ void read_meme_file( Database* data, char* name ) {
 
 void free_database( Database* data ) {
 	int i;
-	
 	for( i = 0; i < data->num_fonts; i++ ) { 
 		free_font( &data->fonts[i] );
 	}
-
 	for( i = 0; i < data->num_memes; i++ ) { 
 		close_image( &data->memes[i].pic );
 	}
-
 	free( data->fonts );
 	free( data->memes );
 }

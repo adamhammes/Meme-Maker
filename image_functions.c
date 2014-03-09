@@ -53,10 +53,14 @@ Image make_one( Image* pic1, Image* pic2, int x, int y ) {
 		}
 	}
 
+	if( x < 0 || y < 0 ) {
+		return temp;
+	}
+
+
 	for( j = y; (j - y) < pic2->height && j < pic1->height; j++ ) {
 		for( i = x; (i - x) < pic2->width && i < pic1->width; i++ ) {
-			if( i - x < pic2->width && j - y < pic2->height &&
-				i - x >= 0 && j - y >= 0 ) {
+			if( i - x < pic2->width && j - y < pic2->height ) {
 				temp.pixels[i][j] = overlay( &pic1->pixels[i][j], &pic2->pixels[i - x][j - y]);
 			}
 		}
@@ -75,11 +79,9 @@ Image crop(Image* pic, int x_start, int y_start, int x, int y) {
 	for( i = 0; i < new.width; i++ ) {
 		new.pixels[i] = (Pixel*) malloc( new.height * sizeof(Pixel) );	
 	}
-
 	for( j = y_start; j < (y_start + y) && j < pic->height; j++ ) { 
 		for( i = x_start; i < (x_start + x) && i < pic->width; i++ ) {
-			if( i - x_start < pic->width && j - y_start < pic->height &&
-				i - x_start >= 0 && j -y_start >= 0 ) {
+			if( i - x_start < pic->width && j - y_start < pic->height ) {
 				new.pixels[i - x_start][j - y_start] = pic->pixels[i][j];
 			}
 		}
@@ -131,7 +133,6 @@ void close_image(Image* image) {
 	for( i = 0; i < image->width; i++ ) {
 		free( image->pixels[i] );
 	}
-
 	free( image->pixels );
 }
 

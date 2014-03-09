@@ -1,3 +1,10 @@
+meme: meme.o meme_functions.o font_functions.o image_functions.o
+	gcc -o meme meme.o meme_functions.o font_functions.o image_functions.o pixel_functions.o -lm
+
+meme.o : meme.c meme_functions.o font_functions.o image_functions.o
+	gcc -ansi -pedantic -c meme.c
+
+
 test: testing.o font_functions.o meme_functions.o
 	gcc -o testing testing.o image_functions.o pixel_functions.o font_functions.o -lm
 

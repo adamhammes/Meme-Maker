@@ -13,9 +13,10 @@ typedef struct font_s {
 
 typedef struct place_s {
 	char name[100];
-
+	char text[100];
 	int x;
 	int y;
+	int has_text;
 } Place;
 
 
@@ -29,10 +30,9 @@ typedef struct meme_s {
 } Meme;
 
 typedef struct macro_s {
-	Font* f;
-	char* top_text;
-	char* bot_test;
-	Meme* m;
+	Font* font;
+	Meme* meme;
+	char outfile[100];
 } Macro;
 
 typedef struct database_s {

@@ -86,9 +86,7 @@ int set_letter( Font* f, char c, int x, int y, int w, int h ) {
 
 void free_font( Font* font ) {
 	int i;
-
 	close_image( &font->base_image );
-
 	for( i = 0; i < 256; i++ ) {
 		if( font->coords[i][3] != 0 ) {
 			close_image( &font->letters[i] );
@@ -115,7 +113,7 @@ int calculate_width( Font* font, char* sequence ) {
 	return width;
 }
 
-int crop_position( Font* f, Image* pic, char* sequence, int index, int x, int y ) {
+int crop_position( Font* f, Image* pic, char* sequence, int index, int x ) {
 	int i;
 	int cur_width = 0;
 	int halfway = calculate_width( f, sequence ) / 2; /* truncation is fine here */
