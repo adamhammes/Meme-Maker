@@ -117,12 +117,9 @@ int crop_position( Font* f, Image* pic, char* sequence, int index, int x ) {
 	int far_left = x - halfway;
 
 	for( i = 0; i < index; i++ ) {
-		if( cur_width + get_width( f, sequence[i] ) > halfway ) {
-			break;
-		}
 		cur_width += get_width( f, sequence[i] );
 	}
-
+	
 	return cur_width + far_left;
 }
 
