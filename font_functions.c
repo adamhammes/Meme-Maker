@@ -40,13 +40,11 @@ Font read_font_file( char* name ) {
 	FILE* file = fopen( name, "r" );
 	
 	/* set all coords to zero so we know later which ones are initialized */
-
 	for( i = 0; i < 256; i++ ) {
 		for( j = 0; j < 4; j++ ) { 
 			f.coords[i][j] = 0;
 		}
 	}
-
 	while( getline( &line, &buffer_size, file ) != -1 ) { /* while we have not reached end of file */
 		if( line[0] == 'N' ) { /* if we are reading the name line */
 			no_whitespace( line );
@@ -65,7 +63,6 @@ Font read_font_file( char* name ) {
 		line = NULL;
 	}
 	fclose( file );
-	
 	for( i = 0; i < 256; i++ ) {
 		if( f.coords[i][2] != 0 ) { /* if the coordinates were listed for this character */
 			set_letter( &f, (char) i, f.coords[i][0], f.coords[i][1], f.coords[i][2], f.coords[i][3] );
