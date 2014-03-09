@@ -1,14 +1,18 @@
-#include "font_functions.h"
+#ifndef _TESTING_C_
+#define _TESTING_C_ 
+
+
+#include "meme_functions.c"
+
 
 int main() {
-	Font* f = read_font_file( "impact.fsf" );
+	Database* d;
+	read_meme_file( d, "memes.mem" );
 
-	printf( "%s\n", f->name );
+	printf( "%s\n", d->memes[0].name );
 
-	printf( "%d\n", f->letters['a'].width );
-
-	write_file( &f->letters['a'], "a.simp" );
+	free_database( d );
 	return 0;
 }
 
-
+#endif
