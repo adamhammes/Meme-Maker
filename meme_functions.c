@@ -54,7 +54,7 @@ void read_meme_file( Database* data, char* name ) {
 		getline(&line, &line_size, file );
 		no_whitespace( line );
 	}
-
+	
 	/* count spaces so we know how many words there are */
 	num_memes = count_spaces( line ) + 1;
 	/* now we know the number of memes, so we can properly allocate memory */
@@ -69,7 +69,6 @@ void read_meme_file( Database* data, char* name ) {
 		word = strtok( NULL, " " );
 		data->memes[i] = make_meme( word );
 	}
-	
 	free( line );
 	line = NULL;
 
@@ -82,7 +81,7 @@ void read_meme_file( Database* data, char* name ) {
 		getline( &line, &line_size, file );
 		no_whitespace( line );
 	}
-		
+	
 	no_whitespace( line );
 	num_fonts = count_spaces( line ) + 1;
 	data->fonts = (Font*) malloc( sizeof( Font ) * num_fonts );
@@ -91,6 +90,7 @@ void read_meme_file( Database* data, char* name ) {
 	index = strchr( line, ':' ) - line + 1;
 	word = strtok( &line[index], " " );
 	data->fonts[0] = read_font_file( word );
+
 
 	for( i = 1; i < num_fonts; i++ ) {
 		data->fonts[i] = read_font_file( strtok( NULL, " " ) );
@@ -121,7 +121,6 @@ void read_meme_file( Database* data, char* name ) {
 		free( line );
 		line = NULL;
 	}
-
 	fclose( file );
 }
 

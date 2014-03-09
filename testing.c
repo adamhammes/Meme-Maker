@@ -1,12 +1,10 @@
-#ifndef _TESTING_C_
-#define _TESTING_C_ 
-
-
-#include "meme_functions.c"
+#include "meme_functions.h"
 
 
 int main() {
-	Database* d;
+	printf("started\n");	
+	Database* d = (Database*) malloc( sizeof( Database ) );
+	printf("almost there...");
 	read_meme_file( d, "memes.mem" );
 
 	printf( "%s\n", d->memes[0].name );
@@ -14,5 +12,3 @@ int main() {
 	free_database( d );
 	return 0;
 }
-
-#endif
