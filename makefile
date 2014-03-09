@@ -1,4 +1,4 @@
-meme: meme.o meme_functions.o font_functions.o image_functions.o
+meme: meme.c meme.o meme_functions.o font_functions.o image_functions.o
 	gcc -o meme meme.o meme_functions.o font_functions.o image_functions.o pixel_functions.o -lm
 
 meme.o : meme.c meme_functions.o font_functions.o image_functions.o

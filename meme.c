@@ -4,18 +4,21 @@
 int main( int argc, char** argv ) {
 	Database* d = malloc( sizeof( Database ) );
 	FILE* file = fopen( argv[2], "r" );
-	char* line;
-	char* word;
-	size_t size;
+	char* line = NULL;
+	char* word = NULL;
+	size_t size = 0;
 	int i, j;
 	Macro* macro = malloc( sizeof( Macro ) );
 	Place* place;
-
+	
 	read_meme_file( d, argv[1] );
 
-	while( getline( &line, &size, file ) != -1 ) {
-		if( strcmp( line, "\n" ) == 0 ) continue;
+	while( getline( &line, &size, file ) != -1 ) {	
+		if( strcmp( line, "\n" ) == 0 ) {	
+			continue;
+		}
 		no_whitespace( line );
+			
 
 		word = strtok( line, " :" );
 
@@ -24,7 +27,8 @@ int main( int argc, char** argv ) {
 		} else if( strcmp( word, "OUTFILE" ) == 0 ) {
 			strcpy( macro->outfile, strtok( NULL, " :" ) );
 		} else if( strcmp( word, "MEME" ) == 0 ) {
-			macro->meme = get_meme( d, strtok( NULL, " :" ) );
+			word = strtok( NULL, " :" );
+			macro->meme = get_meme( d, word );
 		} else if( strcmp( word, "FONT" ) == 0 ) {
 			macro->font = get_font( d, strtok( NULL, " :" ) );
 		} else {
@@ -33,8 +37,6 @@ int main( int argc, char** argv ) {
 			place->has_text = 1;
 		}
 	}
-
-	write_file( & macro->meme->pic, "FILE" );
 
 	for( i = 0; i < macro->meme->num_places; i++ ) {
 		if( macro->meme->places[i].has_text == 1 ) {
@@ -51,15 +53,11 @@ int main( int argc, char** argv ) {
 			}
 		}
 	}
-
 	write_file( &macro->meme->pic, macro->outfile );
 	
 	free( macro );
-
 	free_database( d );
 	free( d );
-
-
 
 	fclose( file );
 

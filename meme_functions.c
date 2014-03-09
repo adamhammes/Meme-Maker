@@ -51,7 +51,6 @@ Font* get_font( Database* data, char* name ) {
 
 Meme* get_meme( Database* data, char* name ) {
 	int i;
-
 	for( i = 0; i < data->num_memes; i++ ) {
 		if( strcmp( data->memes[i].name, name ) == 0 ) {
 			return &data->memes[i];
@@ -70,7 +69,6 @@ void read_meme_file( Database* data, char* name ) {
 	Meme* meme;
 	Place* place;	
 
-
 	getline( &line, &line_size, file );
 	no_whitespace( line );
 
@@ -82,20 +80,21 @@ void read_meme_file( Database* data, char* name ) {
 	/* count spaces so we know how many words there are */
 	num_memes = count_spaces( line ) + 1;
 	/* now we know the number of memes, so we can properly allocate memory */
-	data->memes = (Meme*)  calloc( num_memes, sizeof( Meme ) );
+	data->memes = (Meme*)  malloc( num_memes * sizeof( Meme ) );
 	data->num_memes = num_memes;
-	
+
+
 	index = strchr( line, ':' ) - line + 1; /* find where the words start */
 	word = strtok( &line[index], " " );
 	strcpy( data->memes[0].name, word );
 	data->memes[0] = make_meme( word );
+	
 	for( i = 1; i < num_memes; i++ ) {
 		word = strtok( NULL, " " );
 		data->memes[i] = make_meme( word );
 	}
 	free( line );
 	line = NULL;
-
 
 
 	/* second lines is the fonts */
@@ -123,12 +122,10 @@ void read_meme_file( Database* data, char* name ) {
 	free( line );
 	line = NULL;
 
-
 	while( getline( &line, &line_size, file ) != -1 ) {	/* while we haven't reached end of file */
 		if( strcmp( line, "\n" ) == 0 ) { 
 			continue;
 		}
-		
 		no_whitespace( line );	
 		word = strtok( line, " :" ) ;
 		meme = get_meme( data, word );
