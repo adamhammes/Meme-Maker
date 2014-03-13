@@ -7,7 +7,7 @@
 #include <string.h>
 
 
-void no_whitespace( char* str );
+char* no_whitespace( char* str );
 Font read_font_file( char* name );
 void free_font( Font* font );
 

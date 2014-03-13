@@ -4,7 +4,8 @@ FILE* open_file(char* name) {
 	FILE* file = fopen( name, "rb" );
 
 	if( file == 0 ) {
-		printf("File not found.\n");
+		printf("%s not found.\n", name);
+
 		exit(0);
 	}
 
@@ -15,7 +16,7 @@ FILE* open_file(char* name) {
 
 
 Image read_in( char* name ) {
-	FILE* f = fopen( name, "rb" );
+	FILE* f = open_file( name );
 
 	int i, j;
 	Image image;

@@ -9,11 +9,9 @@ int main( int argc, char** argv ) {
 		exit(0);
 	}
 
-	infile = open_file( argv[1] );
-	pic1 = read_in( infile );
+	pic1 = read_in( argv[1] );
 
-	infile = open_file( argv[2] );
-	pic2 = read_in( infile );
+	pic2 = read_in( argv[2] );
 	
 	fclose( infile );
 	

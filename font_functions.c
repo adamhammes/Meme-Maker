@@ -3,33 +3,31 @@
 
 #include "font_functions.h"
 
-#define MAX_LENGTH 256
 
-void no_whitespace( char* str ) {
-	int begin;
-	int end;
-
+char* no_whitespace( char* str ) {
+	char* end;
+	
 	if( strlen( str ) < 1 || str[0] == '\n' ) {
-		return;
+		return str;
 	}
 
-	begin = 0;
-	end = strlen( str ) - 1;
-
-	while( isspace( str[begin] ) ) {
-		begin++;
+	while( isspace( str[0] ) ) {
+		str++;
 	}
 
-	while( end > begin && isspace( str[end] ) ) {
+	end = str + strlen( str ) - 1;
+	while( end > str  && isspace( end[0] ) ) {
 		end--;
 	}
+
+	end[1] = 0;
 	
-	str[ end + 1 ] = 0;
-	memmove( str, str + begin, end - begin + 2 ); /* +2 for null terminator */
+	return str;
 }
 
 Font read_font_file( char* name ) {
 	char* line = NULL;
+	char* trim;
 	Image temp;
 	Font f;
 	int length;
@@ -38,6 +36,11 @@ Font read_font_file( char* name ) {
 	int i, j;
 	size_t buffer_size;
 	FILE* file = fopen( name, "r" );
+
+	if( file == 0 ) { 
+		printf("%s not found\n", name );
+		exit(0);
+	}
 	
 	/* set all coords to zero so we know later which ones are initialized */
 	for( i = 0; i < 256; i++ ) {
@@ -46,18 +49,16 @@ Font read_font_file( char* name ) {
 		}
 	}
 	while( getline( &line, &buffer_size, file ) != -1 ) { /* while we have not reached end of file */
-		if( line[0] == 'N' ) { /* if we are reading the name line */
-			no_whitespace( line );
-			length = strlen( line ) - 5 + 1; /* plus 1 to account for null 0 */
-			strcpy( f.name, &line[5] );
+		trim = no_whitespace( line );
+		if( trim[0] == 'N' ) { /* if we are reading the name line */
+			length = strlen( trim ) - 5 + 1; /* plus 1 to account for null 0 */
+			strcpy( f.name, &trim[5] );
 			f.name[length - 1] = 0;
-		} else if( line[0] == 'I' ) { /* if we are reading file name line */
-			no_whitespace( line );
-			f.base_image = read_in( &line[6] );
+		} else if( trim[0] == 'I' ) { /* if we are reading file name line */
+			f.base_image = read_in( &trim[6] );
 		} else if( line[0] == 'C' ) { /* if we are specifying character dimensions */
-			no_whitespace( line );
-			c = line[9];
-			sscanf( line,  "CHARACTER%c:%d %d %d %d", &c, &f.coords[c][0], &f.coords[c][1], &f.coords[c][2], &f.coords[c][3] );
+			c = trim[9];
+			sscanf( trim,  "CHARACTER%c:%d %d %d %d", &c, &f.coords[c][0], &f.coords[c][1], &f.coords[c][2], &f.coords[c][3] );
 		}
 		free( line );
 		line = NULL;
